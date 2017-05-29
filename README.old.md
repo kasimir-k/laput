@@ -1,7 +1,7 @@
 # laput
 A simple post-it board
 
-##Note
+## Note
 
 - Header:
 	- Draging handle
@@ -12,7 +12,7 @@ A simple post-it board
 		- Button to delete the note
 - Textarea (editable by clicking in)
 
-##List
+## List
 
 - Header with:
 	- Draging handle
@@ -23,7 +23,7 @@ A simple post-it board
 	- Button to delete the list
 - Note container
  
-##Board
+## Board
 
 - Header:
 	- Button to add a new list

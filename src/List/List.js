@@ -1,17 +1,28 @@
 import React, { Component } from 'react';
 import './List.css';
 
+import Note from '../Note/Note.js';
+
 class List extends Component {
   render() {
+
+    const notes = this.props.list.notes && this.props.list.notes.map((note) =>
+      <Note note={note} key={note.id} />
+    );
+
+    const handleAddNote = (e) => {
+      this.props.handleAddNote(e, this.props.list.id);
+    };
+
     return (
-      <div className="List">
+      <li className="List">
         <div className="List-header">
-            Here be the note add button
+            <button onClick={handleAddNote}>Add Note</button>
         </div>
-        <p className="List-notes">
-            Here be the notes
-        </p>
-      </div>
+        <ul className="List-notes">
+            {notes}
+        </ul>
+      </li>
     );
   }
 }

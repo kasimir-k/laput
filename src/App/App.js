@@ -11,9 +11,9 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React-Laput</h2>
         </div>
-        <p className="App-board">
+        <div className="App-board">
           <Board />
-        </p>
+        </div>
       </div>
     );
   }
