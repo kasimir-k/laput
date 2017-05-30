@@ -12,7 +12,8 @@ const noteSource = {
   beginDrag(props) {
     return {
       noteId: props.note.id,
-      listId: props.listId
+      listId: props.listId,
+      index: props.index
     };
   }
 };
@@ -20,7 +21,9 @@ const noteSource = {
 const noteTarget = {
   hover(props, monitor, component) {
     const dragIndex = monitor.getItem().index;
-    const hoverIndex = props.note.index;
+    const dragList = monitor.getItem().listId;
+    const hoverIndex = props.index;
+    const hoverList = props.listId;
 
     if (dragIndex === hoverIndex) {
       return;
@@ -41,7 +44,7 @@ const noteTarget = {
       return;
     }
 
-    props.handleNoteDrag(monitor.getItem(), props.note, dragIndex, hoverIndex);
+    props.handleNoteDrag(dragIndex, hoverIndex, dragList, hoverList);
     monitor.getItem().index = hoverIndex;
   }
 };
@@ -49,6 +52,7 @@ const noteTarget = {
 function dragCollect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
     isDragging: monitor.isDragging()
   }
 }
@@ -72,10 +76,14 @@ class Note extends Component {
 
     const handleDeleteNote = (e) => {};
 
-    return this.props.connectDragSource(this.props.connectDropTarget(
-      <li className="Note">
+    const opacity = this.props.isDragging ? 0 : 1;
+
+    return this.props.connectDropTarget(this.props.connectDragPreview(
+      <li className="Note" style={{ opacity }}>
         <div className="Note-header">
+          {this.props.connectDragSource(
             <button className="drag-handle">::::::</button>
+          )}
             <div className="menu-container">
               <label>
                 <Toggle

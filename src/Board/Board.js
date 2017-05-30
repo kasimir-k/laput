@@ -28,8 +28,7 @@ class Board extends Component {
     const list = {
       id: 'list' + Date.now(),
       name: '',
-      notes: [],
-      index: lists.length
+      notes: []
     }
     lists.push(list);
     this.setState({ lists: lists});
@@ -46,8 +45,7 @@ class Board extends Component {
       id: 'note' + Date.now(),
       done: false,
       prio: false,
-      text: '',
-      index: lists[listIndex].notes.length
+      text: ''
     }
     lists[listIndex].notes.push(note);
     this.setState({ lists: lists});
@@ -79,9 +77,19 @@ class Board extends Component {
     localStorage.setItem('laputState', JSON.stringify(this.state));
   }
 
-  handleNoteDrag(dragNote, targetNote, dragIndex, hoverIndex) {
-    console.log('drag:', dragNote);
-    console.log('target:', targetNote);
+  handleNoteDrag(dragIndex, hoverIndex, dragList, hoverList) {
+    const lists = this.state.lists.slice();
+    const dragListIndex = lists.findIndex((i) => {
+      return i.id === dragList;
+    });
+    const hoverListIndex = lists.findIndex((i) => {
+      return i.id === hoverList;
+    });
+    const dragNote = lists[dragListIndex].notes[dragIndex];
+    lists[dragListIndex].notes.splice(dragIndex, 1);
+    lists[hoverListIndex].notes.splice(hoverIndex, 0, dragNote);
+    this.setState({ lists: lists});
+    localStorage.setItem('laputState', JSON.stringify(this.state));
   }
 
   render() {

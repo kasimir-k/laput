@@ -6,11 +6,12 @@ class List extends Component {
 
   render() {
 
-    const notes = this.props.list.notes && this.props.list.notes.map((note) =>
+    const notes = this.props.list.notes && this.props.list.notes.map((note, i) =>
       <Note
         listId={this.props.list.id}
         note={note}
         key={note.id}
+        index={i}
         handleChangeText={this.props.handleChangeText}
         handleNoteDrag={this.props.handleNoteDrag} />
     );

@@ -19,3 +19,7 @@ li.Note .react-toggle + * {
 li.Note .drag-handle {
   cursor: move;
 }
+
+li.Note .drag-handle:focus {
+  outline: none;
+}
