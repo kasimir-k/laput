@@ -1,0 +1,21 @@
+li.Note {
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+  margin: 0.5rem;
+}
+
+li.Note textarea {
+  border: 0;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+li.Note .react-toggle,
+li.Note .react-toggle + * {
+  transform: scale(0.75);
+}
+
+li.Note .drag-handle {
+  cursor: move;
+}

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './List.css';
-
 import Note from '../Note/Note.js';
 
 class List extends Component {
+
   render() {
 
     const notes = this.props.list.notes && this.props.list.notes.map((note) =>
@@ -11,7 +11,8 @@ class List extends Component {
         listId={this.props.list.id}
         note={note}
         key={note.id}
-        handleChangeText={this.props.handleChangeText} />
+        handleChangeText={this.props.handleChangeText}
+        handleNoteDrag={this.props.handleNoteDrag} />
     );
 
     const handleAddNote = (e) => {

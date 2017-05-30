@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+
 import './Board.css';
 
 import List from '../List/List.js';
@@ -8,12 +11,15 @@ class Board extends Component {
   constructor(props) {
       super(props);
 
-      this.state = JSON.parse(localStorage.getItem('laputState')) || { lists : [] };
+      const initStateJSON = localStorage.getItem('laputState');
+
+      this.state = (initStateJSON && JSON.parse(initStateJSON)) || { lists : [] };
 
       this.handleAddList = this.handleAddList.bind(this);
       this.handleAddNote = this.handleAddNote.bind(this);
       this.handleChangeName = this.handleChangeName.bind(this);
       this.handleChangeText = this.handleChangeText.bind(this);
+      this.handleNoteDrag = this.handleNoteDrag.bind(this);
   }
 
   handleAddList(e) {
@@ -22,7 +28,8 @@ class Board extends Component {
     const list = {
       id: 'list' + Date.now(),
       name: '',
-      notes: []
+      notes: [],
+      index: lists.length
     }
     lists.push(list);
     this.setState({ lists: lists});
@@ -39,7 +46,8 @@ class Board extends Component {
       id: 'note' + Date.now(),
       done: false,
       prio: false,
-      text: ''
+      text: '',
+      index: lists[listIndex].notes.length
     }
     lists[listIndex].notes.push(note);
     this.setState({ lists: lists});
@@ -71,6 +79,11 @@ class Board extends Component {
     localStorage.setItem('laputState', JSON.stringify(this.state));
   }
 
+  handleNoteDrag(dragNote, targetNote, dragIndex, hoverIndex) {
+    console.log('drag:', dragNote);
+    console.log('target:', targetNote);
+  }
+
   render() {
 
     const lists = this.state.lists.map((list) =>
@@ -79,7 +92,8 @@ class Board extends Component {
         key={list.id}
         handleAddNote={this.handleAddNote}
         handleChangeName={this.handleChangeName}
-        handleChangeText={this.handleChangeText} />
+        handleChangeText={this.handleChangeText}
+        handleNoteDrag={this.handleNoteDrag} />
     );
 
     return (
@@ -95,4 +109,4 @@ class Board extends Component {
   }
 }
 
-export default Board;
+export default DragDropContext(HTML5Backend)(Board);

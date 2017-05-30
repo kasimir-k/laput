@@ -1,0 +1,4 @@
+ul.Board-lists > li {
+  display: inline-block;
+  width: 15rem;
+}
