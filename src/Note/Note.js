@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import Toggle from 'react-toggle'
+import Toggle from 'react-toggle';
+import Textarea from 'react-textarea-autosize';
 
 import { findDOMNode } from 'react-dom';
-import { DragItemTypes } from '../Constants';
+import { DragItemTypes, NoteColors } from '../Constants';
 import { DragSource, DropTarget } from 'react-dnd';
 
 import './Note.css';
@@ -12,39 +13,44 @@ const noteSource = {
   beginDrag(props) {
     return {
       noteId: props.note.id,
-      listId: props.listId,
       index: props.index
     };
-  }
+  },
+  isDragging(props, monitor) {
+    return monitor.getItem().noteId === props.note.id;
+  },
 };
 
 const noteTarget = {
   hover(props, monitor, component) {
+    const dragNoteId = monitor.getItem().noteId;
     const dragIndex = monitor.getItem().index;
-    const dragList = monitor.getItem().listId;
+    const hoverNoteId = props.note.id;
     const hoverIndex = props.index;
-    const hoverList = props.listId;
 
-    if (dragIndex === hoverIndex) {
+    if (dragNoteId === hoverNoteId) {
       return;
     }
 
+    // the target note's middle, i.e. half of the height of the target
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
     const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    // the drag note's pointer position
     const clientOffset = monitor.getClientOffset();
+    // pointer's position - target's top = distance of the pointer from target's top
     const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
-    // Dragging downwards
+    // Dragging downwards, pointer is less than half way from top
     if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
       return;
     }
 
-    // Dragging upwards
+    // Dragging upwards, pointer is over half way from top
     if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
       return;
     }
 
-    props.handleNoteDrag(dragIndex, hoverIndex, dragList, hoverList);
+    props.handleNoteDrag(dragNoteId, hoverNoteId);
     monitor.getItem().index = hoverIndex;
   }
 };
@@ -66,6 +72,14 @@ function dropCollect(connect, monitor) {
 class Note extends Component {
 
   render() {
+
+    const colorOptions = Object.entries(NoteColors).map((col, i) =>
+      <option
+        value={col[1]}
+        style={{ backgroundColor: col[1]}}
+        key={i}>{col[0]}</option>
+    );
+
     const handleChangeText = (e) => {
       this.props.handleChangeText(e, this.props.listId, this.props.note.id);
     };
@@ -74,12 +88,18 @@ class Note extends Component {
 
     const handlePrioChange = (e) => {};
 
-    const handleDeleteNote = (e) => {};
+    const handleDeleteNote = (e) => {
+      this.props.handleDeleteNote(e, this.props.listId, this.props.note.id);
+    };
 
-    const opacity = this.props.isDragging ? 0 : 1;
+    const handleNoteColorChange = (e) => {
+      this.props.handleNoteColorChange(e, this.props.note.id);
+    };
+
+    const noteClassName = "Note" + (this.props.isDragging ? ' dragging' : '');
 
     return this.props.connectDropTarget(this.props.connectDragPreview(
-      <li className="Note" style={{ opacity }}>
+      <li className={noteClassName} style={{ backgroundColor: this.props.note.color }}>
         <div className="Note-header">
           {this.props.connectDragSource(
             <button className="drag-handle">::::::</button>
@@ -97,10 +117,13 @@ class Note extends Component {
                   onChange={handlePrioChange} />
                 <span>Prio</span>
               </label>
-              <button onClick={handleDeleteNote}>✕</button>
+              <select onChange={handleNoteColorChange} defaultValue={this.props.note.color}>
+                {colorOptions}
+              </select>
+              <button onClick={handleDeleteNote} className="delete">✕</button>
             </div>
         </div>
-        <textarea className="Note-text" onChange={handleChangeText} value={this.props.note.text} />
+        <Textarea className="Note-text" onChange={handleChangeText} value={this.props.note.text} />
       </li>
     ));
   }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { CSSTransitionGroup } from 'react-transition-group';
 import './List.css';
 import Note from '../Note/Note.js';
 
@@ -12,8 +13,10 @@ class List extends Component {
         note={note}
         key={note.id}
         index={i}
+        handleDeleteNote={this.props.handleDeleteNote}
         handleChangeText={this.props.handleChangeText}
-        handleNoteDrag={this.props.handleNoteDrag} />
+        handleNoteDrag={this.props.handleNoteDrag}
+        handleNoteColorChange={this.props.handleNoteColorChange} />
     );
 
     const handleAddNote = (e) => {
@@ -31,7 +34,12 @@ class List extends Component {
           <button onClick={handleAddNote}>Add Note</button>
         </div>
         <ul className="List-notes">
+          <CSSTransitionGroup
+            transitionName="notes-trans"
+            transitionEnterTimeout={1000}
+            transitionLeaveTimeout={1000}>
           {notes}
+          </CSSTransitionGroup>
         </ul>
       </li>
     );

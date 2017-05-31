@@ -3,3 +3,29 @@ li.List {
     margin: 1rem;
     vertical-align: top;
 }
+
+li.List .notes-trans-enter {
+  opacity: 0.01;
+  transform: scaleY(0.01);
+  transform-origin: top;
+}
+
+li.List .notes-trans-enter.notes-trans-enter-active {
+  opacity: 1;
+  transform: scaleY(1);
+  transform-origin: top;
+  transition: all 1000ms ease-in;
+}
+
+li.List .notes-trans-leave {
+  opacity: 1;
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+li.List .notes-trans-leave.notes-trans-leave-active {
+  opacity: 0.01;
+  transform: scaleY(0.01);
+  transform-origin: top;
+  transition: all 1000ms ease-in;
+}

@@ -1,14 +1,25 @@
 li.Note {
   box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
   margin: 0.5rem;
+  padding: 0 0.5rem;
+}
+
+li.List li.Note.dragging {
+  opacity: 0;
 }
 
 li.Note textarea {
+  background-color: transparent;
   border: 0;
   font-size: 1rem;
   margin: 0;
   padding: 0;
+  resize: none;
   width: 100%;
+}
+
+li.Note textarea:focus {
+  outline: none;
 }
 
 li.Note .react-toggle,
@@ -22,4 +33,12 @@ li.Note .drag-handle {
 
 li.Note .drag-handle:focus {
   outline: none;
+}
+
+li.Note button.delete {
+  cursor: pointer;
+}
+
+li.Note select {
+  background-color: transparent;
 }
