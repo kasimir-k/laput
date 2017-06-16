@@ -13,6 +13,7 @@ class List extends Component {
         note={note}
         key={note.id}
         index={i}
+        handleNoteChange={this.props.handleNoteChange}
         handleDeleteNote={this.props.handleDeleteNote}
         handleChangeText={this.props.handleChangeText}
         handleNoteDrag={this.props.handleNoteDrag}

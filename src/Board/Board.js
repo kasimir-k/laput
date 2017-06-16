@@ -22,6 +22,7 @@ class Board extends Component {
       this.handleNoteDrag = this.handleNoteDrag.bind(this);
       this.handleNoteColorChange = this.handleNoteColorChange.bind(this);
       this.handleDeleteNote = this.handleDeleteNote.bind(this);
+      this.handleNoteChange = this.handleNoteChange.bind(this);
   }
 
 
@@ -121,10 +122,28 @@ class Board extends Component {
 
   handleNoteColorChange(e, noteId) {
     e.preventDefault();
-    console.log(e.target.value);
     const lists = this.state.lists.slice();
     const note = findNote(noteId, lists);
     note.color = e.target.value;
+
+    this.setState({ lists: lists});
+    localStorage.setItem('laputState', JSON.stringify(this.state));
+  }
+
+  handleDoneChange(e, noteId) {
+    e.preventDefault();
+    const lists = this.state.lists.slice();
+    const note = findNote(noteId, lists);
+    note.color = e.target.value;
+
+    this.setState({ lists: lists});
+    localStorage.setItem('laputState', JSON.stringify(this.state));
+  }
+
+  handleNoteChange(noteId, property, value) {
+    const lists = this.state.lists.slice();
+    const note = findNote(noteId, lists);
+    note[property] = value;
 
     this.setState({ lists: lists});
     localStorage.setItem('laputState', JSON.stringify(this.state));
@@ -138,6 +157,7 @@ class Board extends Component {
         key={list.id}
         handleAddNote={this.handleAddNote}
         handleDeleteNote={this.handleDeleteNote}
+        handleNoteChange={this.handleNoteChange}
         handleChangeName={this.handleChangeName}
         handleChangeText={this.handleChangeText}
         handleNoteDrag={this.handleNoteDrag}

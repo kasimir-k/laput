@@ -71,7 +71,7 @@ function dropCollect(connect, monitor) {
 
 class Note extends Component {
 
-  render() {
+  render() {console.log(this.props.note.done)
 
     const colorOptions = Object.entries(NoteColors).map((col, i) =>
       <option
@@ -84,7 +84,11 @@ class Note extends Component {
       this.props.handleChangeText(e, this.props.listId, this.props.note.id);
     };
 
-    const handleDoneChange = (e) => {};
+    const handleDoneChange = (e) => {
+      console.log(e.target.checked);
+      e.preventDefault();
+      this.props.handleNoteChange(this.props.note.id, 'done', e.target.value);
+    };
 
     const handlePrioChange = (e) => {};
 
